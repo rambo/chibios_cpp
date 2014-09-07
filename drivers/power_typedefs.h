@@ -14,7 +14,8 @@ typedef struct power_domain_struct
     bool (*post_disable)(void);
 } power_domain_t;
 */
-/*
+/**
+ * Trying to define the struct in the .c
 typedef struct power_domain_struct power_domain_t;
 */
 
