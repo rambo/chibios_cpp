@@ -190,6 +190,8 @@ static const ShellCommand commands[] =
     {"bkp", cmd_bkp},
     {"reset", cmd_reset},
     {"flash", cmd_flash},
+    {"power_request", cmd_power_request},
+    {"power_release", cmd_power_release},
     {NULL, NULL}
 };
 

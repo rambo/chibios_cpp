@@ -15,6 +15,9 @@ class powermanager_class
 
 };
 
+void cmd_power_request(BaseSequentialStream *chp, int argc, char *argv[]);
+void cmd_power_release(BaseSequentialStream *chp, int argc, char *argv[]);
+
 extern powermanager_class powermanager;
 
 #endif

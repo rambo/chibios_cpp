@@ -3,7 +3,8 @@
 #include "board.h"
 #include "drivers/power_typedefs.h"
 #include "drivers/power.hpp"
-
+#include "chprintf.h"
+#include <stdlib.h> // For atoi
 
 static chibios_rt::BinarySemaphore power_semaphore = chibios_rt::BinarySemaphore(false);
 #define LOCK power_semaphore.wait();
@@ -109,6 +110,49 @@ bool powermanager_class::all_released(void)
     return true;
 }
 
+/**
+ * Shell command to test the power request
+ *
+ */
+void cmd_power_request(BaseSequentialStream *chp, int argc, char *argv[])
+{
+    if (argc < 1)
+    {
+        chprintf(chp, "Usage: power_request number_of_power_domain\r\n");
+        return;
+    }
+    uint8_t domain = atoi(argv[0]);
+    if (!powermanager.request((BOARD_POWER_DOMAIN_t)domain))
+    {
+        chprintf(chp, "FAILED: domain was %d\r\n", domain);
+        return;
+    }
+    chprintf(chp, "OK: domain was %d\r\n", domain);
+}
+
+/**
+ * Shell command to test the power release
+ *
+ */
+void cmd_power_release(BaseSequentialStream *chp, int argc, char *argv[])
+{
+    if (argc < 1)
+    {
+        chprintf(chp, "Usage: power_release number_of_power_domain\r\n");
+        return;
+    }
+    uint8_t domain = atoi(argv[0]);
+    if (!powermanager.release((BOARD_POWER_DOMAIN_t)domain))
+    {
+        chprintf(chp, "FAILED: domain was %d\r\n", domain);
+        return;
+    }
+    chprintf(chp, "OK: domain was %d\r\n", domain);
+    if (powermanager.all_released())
+    {
+        chprintf(chp, "All domains released!\r\n");
+    }
+}
 
 // Create an instance to use
 powermanager_class powermanager = powermanager_class();
