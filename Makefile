@@ -52,7 +52,7 @@ endif
 #
 
 # Define project name here
-PROJECT = ruuvitracker
+PROJECT = chibios_cpp
 
 # Imported source files and paths
 CHIBIOS = ChibiOS
@@ -80,6 +80,7 @@ CSRC = $(PORTSRC) \
        $(CHIBIOS)/os/various/chrtclib.c \
        $(CHIBIOS)/os/various/syscalls.c \
        drivers/usb_serial.c
+
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.

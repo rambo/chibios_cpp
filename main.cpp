@@ -30,16 +30,6 @@
 #include "power.h"
 #include "drivers/usb_serial.h"
 
-/* I2C interface #1 */
-// TODO: This should probably be defined in board.h or something. It needs to be globally accessible because in case of I2C timeout we *must* reinit the whole I2C subsystem
-static const I2CConfig i2cfg1 = {
-    OPMODE_I2C,
-    400000,
-    FAST_DUTY_CYCLE_2,
-};
-// TODO: I guess this does not have to be global
-static i2cflags_t i2c_errors = 0;
-
 
 /**
  * Backup domain data
@@ -262,7 +252,6 @@ static void BlinkerThd(void *arg)
 /*
  * Application entry point.
  */
-static const EXTConfig extcfg; 
 int main(void)
 {
     Thread *shelltp = NULL;
@@ -277,22 +266,12 @@ int main(void)
     halInit();
     chSysInit();
 
-    /**
-     * initialize the HAL stuff the testplatform needs
-     */
-    tp_init();
-
     /*
      * Initializes a serial-over-USB CDC driver.
      */
     usb_serial_init();
 
     /* Initializes reset button PA0 */
-    /**
-     * This messes my button wakeup
-    button_init();
-     */
-    extStart(&EXTD1, &extcfg);
 
     /*
      * Shell manager initialization.
@@ -302,9 +281,8 @@ int main(void)
     /*
      * Creates the blinker thread.
      */
-    //chThdCreateStatic(waBlinkerThd, sizeof(waBlinkerThd), NORMALPRIO, (tfunc_t)BlinkerThd, NULL);
+    chThdCreateStatic(waBlinkerThd, sizeof(waBlinkerThd), NORMALPRIO, (tfunc_t)BlinkerThd, NULL);
     palClearPad(GPIOB, GPIOB_LED2);
-
 
 
     /*
@@ -313,7 +291,7 @@ int main(void)
      */
     while (TRUE) {
         if (!shelltp && (SDU.config->usbp->state == USB_ACTIVE)) {
-            //palSetPad(GPIOB, GPIOB_LED2);
+            palSetPad(GPIOB, GPIOB_LED2);
             shelltp = shellCreate(&shell_cfg1, SHELL_WA_SIZE, NORMALPRIO);
         } else if (chThdTerminated(shelltp)) {
             chThdRelease(shelltp);    /* Recovers memory of the previous shell.   */
