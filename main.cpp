@@ -227,9 +227,9 @@ class blinker_thd : public BaseStaticThread<128>
                     time = 500;
                 }
 
-                palClearPad(GPIOB, GPIOB_LED1);
+                board_red_led(PAL_LOW);
                 sleep(time);
-                palSetPad(GPIOB, GPIOB_LED1);
+                board_red_led(PAL_HIGH);
                 sleep(time);
             }
             // TODO: How to get rid of the compiler warning ? the demos do not return anything from their blinkers either...    
@@ -286,12 +286,12 @@ int main(void)
     // TODO: Not really important but would be interesting from learing POV, how to make the shell a dynamic c++ thread
     while (TRUE) {
         if (!shelltp && (SDU.config->usbp->state == USB_ACTIVE)) {
-            palSetPad(GPIOB, GPIOB_LED2);
+            board_green_led(PAL_HIGH);
             shelltp = shellCreate(&shell_cfg1, SHELL_WA_SIZE, NORMALPRIO);
         } else if (chThdTerminated(shelltp)) {
             chThdRelease(shelltp);    /* Recovers memory of the previous shell.   */
             shelltp = NULL;           /* Triggers spawning of a new shell.        */
-            palClearPad(GPIOB, GPIOB_LED2);
+            board_green_led(PAL_LOW);
         }
         BaseThread::sleep(MS2ST(500));
     }

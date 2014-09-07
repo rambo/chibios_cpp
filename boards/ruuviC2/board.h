@@ -127,6 +127,9 @@ extern power_domain_t BOARD_POWER_DOMAIN_CONFIG[BOARD_NUM_POWER_DOMAINS];
 #define GPIOC_GSM_NETLIGHT          14
 #define GPIOC_GSM_STATUS            15
 
+#define board_red_led(bit)  palWritePad(GPIOB, GPIOB_LED1, bit)
+#define board_green_led(bit)  palWritePad(GPIOB, GPIOB_LED2, bit)
+
 /*
  * I/O ports initial setup, this configuration is established soon after reset
  * in the initialization code.
