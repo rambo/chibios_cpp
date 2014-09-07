@@ -45,7 +45,7 @@ const PALConfig pal_default_config =
 
 // Must be in same order as in BOARD_POWER_DOMAIN
 // WTF gives, complains error: array type has incomplete element type
-power_domain_t BOARD_POWER_DOMAIN_CONFIG[] =
+power_domain_t BOARD_POWER_DOMAIN_CONFIG[5] =
 {
     { GPIOC, GPIOC_ENABLE_LDO2, NULL, NULL, NULL, NULL },
     { GPIOC, GPIOC_ENABLE_LDO3, NULL, NULL, NULL, NULL },
