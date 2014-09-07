@@ -94,9 +94,21 @@ ERROR:
 }
 
 /**
- * Checks if all power BOARD_POWER_DOMAIN_CONFIG are released (for example if we might want to go to standby mode...)
+ * Checks if given power domain is enabled
  *
- * @return bool true if all BOARD_POWER_DOMAIN_CONFIG are fully released (false otherwise)
+ * NOTE: This method is mainly for testing and debugging, you need to use a power domain just request it and release when done...
+ *
+ * @return bool true if domain is enabled, false if disabled
+ */
+bool powermanager_class::status(BOARD_POWER_DOMAIN_t domain)
+{
+    return (bool)reservations[domain];
+}
+
+/**
+ * Checks if all power domains are released (for example if we might want to go to standby mode...)
+ *
+ * @return bool true if all domains are fully released (false otherwise)
  */
 bool powermanager_class::all_released(void)
 {
@@ -148,6 +160,10 @@ void cmd_power_release(BaseSequentialStream *chp, int argc, char *argv[])
         return;
     }
     chprintf(chp, "OK: domain was %d\r\n", domain);
+    if (powermanager.status((BOARD_POWER_DOMAIN_t)domain))
+    {
+        chprintf(chp, "Domain %d is still enabled\r\n", domain);
+    }
     if (powermanager.all_released())
     {
         chprintf(chp, "All domains released!\r\n");
