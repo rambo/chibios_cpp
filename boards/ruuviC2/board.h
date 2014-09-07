@@ -114,8 +114,9 @@ typedef enum BOARD_POWER_DOMAIN {
      GSM,
      GPS_VBACKUP, // GPS backup power, for warm starts...
 } BOARD_POWER_DOMAIN_t;
+#define BOARD_NUM_POWER_DOMAINS 5
 // Must have space for all power domains (the definitions are made in board.c)
-extern power_domain_t BOARD_POWER_DOMAIN_CONFIG[5];
+extern power_domain_t BOARD_POWER_DOMAIN_CONFIG[BOARD_NUM_POWER_DOMAINS];
 
 /*
  * I/O ports initial setup, this configuration is established soon after reset
