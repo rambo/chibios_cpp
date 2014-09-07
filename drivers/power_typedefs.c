@@ -2,6 +2,7 @@
 #include "hal.h"
 #include "drivers/power_typedefs.h"
 
+/*
 struct power_domain_struct
 {
     iopinid_t port;
@@ -11,3 +12,4 @@ struct power_domain_struct
     bool (*pre_disable)(void);
     bool (*post_disable)(void);
 };
+*/

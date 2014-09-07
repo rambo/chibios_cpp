@@ -7,14 +7,26 @@
 typedef struct power_domain_struct
 {
     iopinid_t port;
-    int pin;
-    void (*pre_enable)(void);
-    void (*post_enable)(void);
-    void (*pre_disable)(void);
-    void (*post_disable)(void);
+    uint8_t pin; // no port is going to have more than 255 pins...
+    bool (*pre_enable)(void);
+    bool (*post_enable)(void);
+    bool (*pre_disable)(void);
+    bool (*post_disable)(void);
 } power_domain_t;
 */
+/*
 typedef struct power_domain_struct power_domain_t;
+*/
+
+typedef struct power_domain_struct
+{
+    void* port;
+    uint8_t pin; // no port is going to have more than 255 pins...
+    bool (*pre_enable)(void);
+    bool (*post_enable)(void);
+    bool (*pre_disable)(void);
+    bool (*post_disable)(void);
+} power_domain_t;
 
 #ifdef __cplusplus
 extern "C" {

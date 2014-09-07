@@ -1,18 +1,17 @@
 #include "ch.hpp"
 #include "hal.h"
+#include "board.h"
 #include "drivers/power_typedefs.h"
 #include "drivers/power.hpp"
 
-static BinarySemaphore power_semaphore;
-#define LOCK chBSemWait(&power_semaphore);
-#define UNLOCK chBSemSignal(&power_semaphore);
+
+static chibios_rt::BinarySemaphore power_semaphore = chibios_rt::BinarySemaphore(false);
+#define LOCK power_semaphore.wait();
+#define UNLOCK power_semaphore.signal();
 
 // Constructor
-powermanager::powermanager(power_domain_t domains_list[])
+powermanager_class::powermanager_class()
 {
-    // TODO: Make sure this is a pointer to the array (usually it automagically is)
-    domains = domains_list;
-    chBSemInit(&power_semaphore, true); // CHECKME: Are we allowed to init semaphores in at construction time ??
 }
 
 /**
@@ -23,23 +22,23 @@ powermanager::powermanager(power_domain_t domains_list[])
  *
  * @return bool true if everything is ok, false otherwise
  */
-bool powermanager::request(BOARD_POWER_DOMAIN domain)
+bool powermanager_class::request(BOARD_POWER_DOMAIN domain)
 {
-    chDbgAssert(reservations[domain] < 254, "powermanager::request #1", "Trying to request a domain for the 255th time, something must be wrong");
+    chDbgAssert(reservations[domain] < 254, "powermanager_class::request #1", "Trying to request a domain for the 255th time, something must be wrong");
     LOCK;
     if (!reservations[domain])
     {
-        if (domains[domain]->pre_enable)
+        if (BOARD_POWER_DOMAIN_CONFIG[domain].pre_enable)
         {
-            if (!domains[domain]->pre_enable())
+            if (!BOARD_POWER_DOMAIN_CONFIG[domain].pre_enable())
             {
                 goto ERROR;
             }
         }
-        palSetPad(domains[domain]->port, domains[domain]->pin);
-        if (domains[domain]->post_enable)
+        //palSetPad(BOARD_POWER_DOMAIN_CONFIG[domain].port, BOARD_POWER_DOMAIN_CONFIG[domain].pin);
+        if (BOARD_POWER_DOMAIN_CONFIG[domain].post_enable)
         {
-            if (!domains[domain]->post_enable())
+            if (!BOARD_POWER_DOMAIN_CONFIG[domain].post_enable())
             {
                 goto ERROR;
             }
@@ -63,24 +62,24 @@ ERROR:
  *
  * @return bool true if everything is ok, false otherwise
  */
-bool powermanager::release(BOARD_POWER_DOMAIN domain)
+bool powermanager_class::release(BOARD_POWER_DOMAIN domain)
 {
-    chDbgAssert(reservations[domain] >= 1, "powermanager::release #1", "Trying to release unused domain");
+    chDbgAssert(reservations[domain] >= 1, "powermanager_class::release #1", "Trying to release unused domain");
     LOCK;
     reservations[domain]--;
     if (!reservations[domain])
     {
-        if (domains[domain]->pre_disable)
+        if (BOARD_POWER_DOMAIN_CONFIG[domain].pre_disable)
         {
-            if (!domains[domain]->pre_disable())
+            if (!BOARD_POWER_DOMAIN_CONFIG[domain].pre_disable())
             {
                 goto ERROR;
             }
         }
-        palClearPad(domains[domain]->port, domains[domain]->pin);
-        if (domains[domain]->post_disable)
+        //palClearPad(BOARD_POWER_DOMAIN_CONFIG[domain].port, BOARD_POWER_DOMAIN_CONFIG[domain].pin);
+        if (BOARD_POWER_DOMAIN_CONFIG[domain].post_disable)
         {
-            if (!domains[domain]->post_disable())
+            if (!BOARD_POWER_DOMAIN_CONFIG[domain].post_disable())
             {
                 goto ERROR;
             }
@@ -94,11 +93,11 @@ ERROR:
 }
 
 /**
- * Checks if all power domains are released (for example if we might want to go to standby mode...)
+ * Checks if all power BOARD_POWER_DOMAIN_CONFIG are released (for example if we might want to go to standby mode...)
  *
- * @return bool true if all domains are fully released (false otherwise)
+ * @return bool true if all BOARD_POWER_DOMAIN_CONFIG are fully released (false otherwise)
  */
-bool powermanager::all_released(void)
+bool powermanager_class::all_released(void)
 {
     for (uint8_t i=0; i < BOARD_NUM_POWER_DOMAINS; i++)
     {
@@ -111,4 +110,5 @@ bool powermanager::all_released(void)
 }
 
 
-
+// Create an instance to use
+powermanager_class powermanager = powermanager_class();
