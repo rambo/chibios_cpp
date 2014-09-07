@@ -17,6 +17,7 @@
 #include "ch.h"
 #include "hal.h"
 #include "drivers/power_typedefs.h"
+#include "board.h"
 
 #if HAL_USE_PAL || defined(__DOXYGEN__)
 /**
@@ -43,6 +44,7 @@ const PALConfig pal_default_config =
 #endif
 
 // Must be in same order as in BOARD_POWER_DOMAIN
+// WTF gives, complains error: array type has incomplete element type
 power_domain_t BOARD_POWER_DOMAIN_CONFIG[] =
 {
     { GPIOC, GPIOC_ENABLE_LDO2, NULL, NULL, NULL, NULL },

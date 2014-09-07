@@ -3,7 +3,7 @@
 
 struct power_domain_struct
 {
-    void* port;
+    iopinid_t port;
     int pin;
     void (*pre_enable)(void);
     void (*post_enable)(void);
