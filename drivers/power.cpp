@@ -67,8 +67,7 @@ bool powermanager_class::release(BOARD_POWER_DOMAIN_t domain)
 {
     chDbgAssert(reservations[domain] >= 1, "powermanager_class::release #1", "Trying to release unused domain");
     LOCK;
-    reservations[domain]--;
-    if (!reservations[domain])
+    if (reservations[domain] == 1)
     {
         if (BOARD_POWER_DOMAIN_CONFIG[domain].pre_disable)
         {
@@ -86,6 +85,7 @@ bool powermanager_class::release(BOARD_POWER_DOMAIN_t domain)
             }
         }
     }
+    reservations[domain]--;
     UNLOCK;
     return true;
 ERROR:
