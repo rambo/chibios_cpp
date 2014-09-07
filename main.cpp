@@ -269,7 +269,7 @@ int main(void)
      *   RTOS is active.
      */
     halInit();
-    chSysInit();
+    System::init();
 
     /*
      * Initializes a serial-over-USB CDC driver.
@@ -303,6 +303,6 @@ int main(void)
             shelltp = NULL;           /* Triggers spawning of a new shell.        */
             palClearPad(GPIOB, GPIOB_LED2);
         }
-        chThdSleepMilliseconds(1000);
+        BaseThread::sleep(MS2ST(500));
     }
 }
