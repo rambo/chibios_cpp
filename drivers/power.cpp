@@ -93,6 +93,11 @@ ERROR:
     return false;
 }
 
+/**
+ * Checks if all power domains are released (for example if we might want to go to standby mode...)
+ *
+ * @return bool true if all domains are fully released (false otherwise)
+ */
 bool powermanager::all_released(void)
 {
     for (uint8_t i=0; i < BOARD_NUM_POWER_DOMAINS; i++)
