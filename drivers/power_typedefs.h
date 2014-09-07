@@ -3,7 +3,7 @@
 #include "ch.h"
 #include "hal.h"
 
-/* this complains about error: unknown type name 'iopinid_t'
+/* this complains about error: unknown type name 'iopinid_t' but hal.h should get that defined
 typedef struct power_domain_struct
 {
     iopinid_t port;

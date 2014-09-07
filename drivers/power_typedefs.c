@@ -1,3 +1,4 @@
+#include "ch.h"
 #include "hal.h"
 #include "drivers/power_typedefs.h"
 
