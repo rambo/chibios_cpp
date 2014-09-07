@@ -17,6 +17,8 @@
 #ifndef _BOARD_H_
 #define _BOARD_H_
 
+#include "drivers/power_typedefs.h"
+
 /*
  * Setup for STMicroelectronics STM32F4-Discovery board.
  */
@@ -104,6 +106,16 @@
 #define GPIOC_GPS_V_BACKUP_PWR      13
 #define GPIOC_GSM_NETLIGHT          14
 #define GPIOC_GSM_STATUS            15
+
+typedef enum BOARD_POWER_DOMAIN {
+     LDO2=0,    // MicroSD, GPS Antenna
+     LDO3,      // GPS_VCC
+     LDO4,      // Expansion port
+     GSM,
+     GPS_VBACKUP, // GPS backup power, for warm starts...
+} BOARD_POWER_DOMAIN_t;
+// Must have space for all power domains (the definitions are made in board.c)
+extern power_domain_t BOARD_POWER_DOMAIN_CONFIG;
 
 /*
  * I/O ports initial setup, this configuration is established soon after reset

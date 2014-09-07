@@ -42,6 +42,16 @@ const PALConfig pal_default_config =
 };
 #endif
 
+// Must be in same order as in BOARD_POWER_DOMAIN
+power_domain_t BOARD_POWER_DOMAIN_CONFIG[] =
+{
+    { GPIOC, GPIOC_ENABLE_LDO2, NULL, NULL, NULL, NULL },
+    { GPIOC, GPIOC_ENABLE_LDO3, NULL, NULL, NULL, NULL },
+    { GPIOC, GPIOC_ENABLE_LDO4, NULL, NULL, NULL, NULL },
+    { GPIOC, GPIOC_ENABLE_GSM_VBAT, NULL, NULL, NULL, NULL },
+    { GPIOC, GPIOC_GPS_V_BACKUP_PWR, NULL, NULL, NULL, NULL },
+};
+
 /**
  * @brief   Early initialization code.
  * @details This initialization must be performed just after stack setup

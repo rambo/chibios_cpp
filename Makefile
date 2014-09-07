@@ -81,6 +81,7 @@ CSRC = $(PORTSRC) \
        $(CHIBIOS)/os/various/chrtclib.c \
        $(CHIBIOS)/os/various/syscalls.c \
        drivers/usb_serial.c \
+       drivers/power_typedefs.c \
        drivers/reset.c
 
 
