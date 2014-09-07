@@ -88,6 +88,7 @@ CSRC = $(PORTSRC) \
 # setting.
 CPPSRC = $(CHCPPSRC) \
          hacks.cpp \
+         drivers/power.cpp \
          main.cpp
 
 # C sources to be compiled in ARM mode regardless of the global setting.

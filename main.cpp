@@ -28,9 +28,9 @@
 #include "shell.h"
 #include "drivers/debug.h"
 #include "chprintf.h"
-#include "power.h"
 #include "drivers/usb_serial.h"
 #include "drivers/reset.h"
+#include "drivers/power.hpp"
 
 using namespace chibios_rt;
 
@@ -183,8 +183,10 @@ static const ShellCommand commands[] =
     {"mem", cmd_mem},
     {"threads", cmd_threads},
     {"test", cmd_test},
+    /*
     {"stop", cmd_stop},
     {"standby", cmd_standby},
+    */
     {"bkp", cmd_bkp},
     {"reset", cmd_reset},
     {"flash", cmd_flash},

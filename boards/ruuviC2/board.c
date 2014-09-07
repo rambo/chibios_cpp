@@ -16,7 +16,7 @@
 
 #include "ch.h"
 #include "hal.h"
-#include "power.h"
+#include "drivers/power_typedefs.h"
 
 #if HAL_USE_PAL || defined(__DOXYGEN__)
 /**
@@ -47,8 +47,8 @@ const PALConfig pal_default_config =
  * @details This initialization must be performed just after stack setup
  *          and before any other initialization.
  */
-void __early_init(void) {
-
+void __early_init(void)
+{
   stm32_clock_init();
 }
 
@@ -74,7 +74,8 @@ bool_t _sdcard_is_enabled(void)
 /**
  * @brief   SDC card detection.
  */
-bool_t sdc_lld_is_card_inserted(SDCDriver *sdcp) {
+bool_t sdc_lld_is_card_inserted(SDCDriver *sdcp)
+{
 
   (void)sdcp;
   return (   _sdcard_is_inserted()
@@ -84,7 +85,8 @@ bool_t sdc_lld_is_card_inserted(SDCDriver *sdcp) {
 /**
  * @brief   SDC card write protection detection.
  */
-bool_t sdc_lld_is_write_protected(SDCDriver *sdcp) {
+bool_t sdc_lld_is_write_protected(SDCDriver *sdcp)
+{
 
   (void)sdcp;
   /* We have no input for this, suppose false */
@@ -96,8 +98,8 @@ bool_t sdc_lld_is_write_protected(SDCDriver *sdcp) {
 /**
  * @brief   MMC_SPI card detection.
  */
-bool_t mmc_lld_is_card_inserted(MMCDriver *mmcp) {
-
+bool_t mmc_lld_is_card_inserted(MMCDriver *mmcp)
+{
   (void)mmcp;
   return (   _sdcard_is_inserted()
           && _sdcard_is_enabled());
@@ -106,8 +108,8 @@ bool_t mmc_lld_is_card_inserted(MMCDriver *mmcp) {
 /**
  * @brief   MMC_SPI card write protection detection.
  */
-bool_t mmc_lld_is_write_protected(MMCDriver *mmcp) {
-
+bool_t mmc_lld_is_write_protected(MMCDriver *mmcp)
+{
   (void)mmcp;
   /* We have no input for this, suppose false */
   return FALSE;
@@ -118,6 +120,6 @@ bool_t mmc_lld_is_write_protected(MMCDriver *mmcp) {
  * @brief   Board-specific initialization code.
  * @todo    Add your board-specific code, if any.
  */
-void boardInit(void) {
-  power_init();
+void boardInit(void)
+{
 }
