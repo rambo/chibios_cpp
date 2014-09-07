@@ -9,6 +9,10 @@ enum POWER_DOMAIN {
      GPS_VBACKUP, // GPS backup power, for warm starts...
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * Initialize power domain handler.
  * called from  boardInit()
@@ -66,5 +70,8 @@ void cmd_stop(BaseSequentialStream *chp, int argc, char *argv[]);
  */
 void cmd_standby(BaseSequentialStream *chp, int argc, char *argv[]);
 
-
+#ifdef __cplusplus
+}
+#endif
+ 
 #endif /* POWER_H */
