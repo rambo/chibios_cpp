@@ -42,7 +42,7 @@ const PALConfig pal_default_config =
   {0, 0, 0, 0, 0, 0, 0},
 };
 #endif
-// Must be in same order as in BOARD_POWER_DOMAIN
+// Must be in same order as in BOARD_POWER_DOMAINS
 power_domain_t BOARD_POWER_DOMAIN_CONFIG[BOARD_NUM_POWER_DOMAINS] =
 {
     { GPIOC, GPIOC_ENABLE_LDO2, NULL, NULL, NULL, NULL },

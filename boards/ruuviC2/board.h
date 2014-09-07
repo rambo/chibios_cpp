@@ -107,7 +107,7 @@
 #define GPIOC_GSM_NETLIGHT          14
 #define GPIOC_GSM_STATUS            15
 
-typedef enum BOARD_POWER_DOMAIN {
+typedef enum BOARD_POWER_DOMAINS {
      LDO2=0,    // MicroSD, GPS Antenna
      LDO3,      // GPS_VCC
      LDO4,      // Expansion port
@@ -117,6 +117,9 @@ typedef enum BOARD_POWER_DOMAIN {
 #define BOARD_NUM_POWER_DOMAINS 5
 // Must have space for all power domains (the definitions are made in board.c)
 extern power_domain_t BOARD_POWER_DOMAIN_CONFIG[BOARD_NUM_POWER_DOMAINS];
+#define GPS_VCC LDO3
+#define GPS_ANT LDO2
+#define SDCARD LDO2
 
 /*
  * I/O ports initial setup, this configuration is established soon after reset

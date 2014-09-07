@@ -9,8 +9,8 @@ class powermanager_class
 
     public:
         powermanager_class();
-        bool request(BOARD_POWER_DOMAIN domain);
-        bool release(BOARD_POWER_DOMAIN domain);
+        bool request(BOARD_POWER_DOMAIN_t domain);
+        bool release(BOARD_POWER_DOMAIN_t domain);
         bool all_released(void);
 
 };

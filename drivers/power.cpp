@@ -22,7 +22,7 @@ powermanager_class::powermanager_class()
  *
  * @return bool true if everything is ok, false otherwise
  */
-bool powermanager_class::request(BOARD_POWER_DOMAIN domain)
+bool powermanager_class::request(BOARD_POWER_DOMAIN_t domain)
 {
     chDbgAssert(reservations[domain] < 254, "powermanager_class::request #1", "Trying to request a domain for the 255th time, something must be wrong");
     LOCK;
@@ -62,7 +62,7 @@ ERROR:
  *
  * @return bool true if everything is ok, false otherwise
  */
-bool powermanager_class::release(BOARD_POWER_DOMAIN domain)
+bool powermanager_class::release(BOARD_POWER_DOMAIN_t domain)
 {
     chDbgAssert(reservations[domain] >= 1, "powermanager_class::release #1", "Trying to release unused domain");
     LOCK;
