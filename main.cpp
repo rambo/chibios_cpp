@@ -21,6 +21,7 @@
 #include <time.h>
 
 #include "ch.h"
+#include "ch.hpp"
 #include "hal.h"
 #include "test.h"
 
@@ -29,6 +30,9 @@
 #include "chprintf.h"
 #include "power.h"
 #include "drivers/usb_serial.h"
+
+using namespace chibios_rt;
+
 
 
 /**
@@ -224,29 +228,30 @@ static const ShellConfig shell_cfg1 = {
 /*
  * Red LED blinker thread, times are in milliseconds.
  */
-static WORKING_AREA(waBlinkerThd, 128);
 
-__attribute__((noreturn))
-static void BlinkerThd(void *arg)
+class BlinkerThd : public BaseStaticThread<128>
 {
-    (void)arg;
-    chRegSetThreadName("blinker");
-    systime_t time;
-    /** 
-     * Remove the noreturn attribute if using this check
-    while (!chThdShouldTerminate())
-    */
-    while (TRUE)
-    {
-        time = SDU.config->usbp->state == USB_ACTIVE ? 250 : 500;
-        palClearPad(GPIOB, GPIOB_LED1);
-        chThdSleepMilliseconds(time);
-        palSetPad(GPIOB, GPIOB_LED1);
-        chThdSleepMilliseconds(time);
-    }
-    //chThdExit(0);
-}
+    protected:
+        virtual msg_t main(void)
+        {
+            systime_t time;
+            setName("blinker");
+            while (true)
+            {
+                time = SDU.config->usbp->state == USB_ACTIVE ? 250 : 500;
+                palClearPad(GPIOB, GPIOB_LED1);
+                sleep(time);
+                palSetPad(GPIOB, GPIOB_LED1);
+                sleep(time);
+            }
+        }
 
+    public:
+        // Empty constructor
+        BlinkerThd(void) : BaseStaticThread<128>() { }
+};
+
+static BlinkerThd blinky;
 
 
 /*
@@ -281,7 +286,7 @@ int main(void)
     /*
      * Creates the blinker thread.
      */
-    chThdCreateStatic(waBlinkerThd, sizeof(waBlinkerThd), NORMALPRIO, (tfunc_t)BlinkerThd, NULL);
+    blinky.start(NORMALPRIO);
     palClearPad(GPIOB, GPIOB_LED2);
 
 
