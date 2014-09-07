@@ -112,7 +112,6 @@ static void cmd_bkp(BaseSequentialStream *chp, int argc, char *argv[])
     
 }
 
-
 static void cmd_mem(BaseSequentialStream *chp, int argc, char *argv[])
 {
     size_t n, size;
@@ -215,13 +214,22 @@ class blinker_thd : public BaseStaticThread<128>
             setName("blinker");
             while (true)
             {
-                time = SDU.config->usbp->state == USB_ACTIVE ? 250 : 500;
+                if (SDU.config->usbp->state == USB_ACTIVE)
+                {
+                    time = 250;
+                }
+                else
+                {
+                    time = 500;
+                }
+
                 palClearPad(GPIOB, GPIOB_LED1);
                 sleep(time);
                 palSetPad(GPIOB, GPIOB_LED1);
                 sleep(time);
             }
-            // TODO: How to get rid of the compiler warning ? the demos do not return anything from their blinkers either...        
+            // TODO: How to get rid of the compiler warning ? the demos do not return anything from their blinkers either...    
+            // warning: no return statement in function returning non-void [-Wreturn-type]    
         }
 
     public:
