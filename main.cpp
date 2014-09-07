@@ -279,6 +279,7 @@ int main(void)
      * Normal main() thread activity, in this demo it does nothing except
      * sleeping in a loop and check the USB state.
      */
+    // TODO: Not really important but would be interesting from learing POV, how to make the shell a dynamic c++ thread
     while (TRUE) {
         if (!shelltp && (SDU.config->usbp->state == USB_ACTIVE)) {
             palSetPad(GPIOB, GPIOB_LED2);
