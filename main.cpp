@@ -61,8 +61,6 @@ extern uint32_t __ram_end__;
 /* Command line related.                                                     */
 /*===========================================================================*/
 
-#define SHELL_WA_SIZE   THD_WA_SIZE(2048)
-#define TEST_WA_SIZE    THD_WA_SIZE(256)
 
 /**
  * SW-reset of the board
@@ -92,7 +90,8 @@ static void cmd_flash(BaseSequentialStream *chp, int argc, char *argv[])
 
 static void cmd_bkp(BaseSequentialStream *chp, int argc, char *argv[])
 {
-    if (argc < 2) {
+    if (argc < 2)
+    {
         chprintf(chp, "Usage: bkp set member value | bkp get member\r\n");
         return;
     }
@@ -148,7 +147,8 @@ static void cmd_mem(BaseSequentialStream *chp, int argc, char *argv[])
     size_t n, size;
 
     (void)argv;
-    if (argc > 0) {
+    if (argc > 0)
+    {
         chprintf(chp, "Usage: mem\r\n");
         return;
     }
@@ -164,13 +164,15 @@ static void cmd_threads(BaseSequentialStream *chp, int argc, char *argv[])
     Thread *tp;
 
     (void)argv;
-    if (argc > 0) {
+    if (argc > 0)
+    {
         chprintf(chp, "Usage: threads\r\n");
         return;
     }
     chprintf(chp, "    addr    stack prio refs     state time\r\n");
     tp = chRegFirstThread();
-    do {
+    do
+    {
         chprintf(chp, "%.8lx %.8lx %4lu %4lu %9s %lu\r\n",
                  (uint32_t)tp, (uint32_t)tp->p_ctx.r13,
                  (uint32_t)tp->p_prio, (uint32_t)(tp->p_refs - 1),
@@ -178,33 +180,36 @@ static void cmd_threads(BaseSequentialStream *chp, int argc, char *argv[])
         tp = chRegNextThread(tp);
     } while (tp != NULL);
 #ifdef CORTEX_ENABLE_WFI_IDLE
-    chprintf(chp, "CRTX_ENABLE_WFI_IDLE=%d\r\n", CORTEX_ENABLE_WFI_IDLE);
+    chprintf(chp, "CORTEX_ENABLE_WFI_IDLE=%d\r\n", CORTEX_ENABLE_WFI_IDLE);
 #endif
 #ifdef ENABLE_WFI_IDLE
-    chprintf(chp, "ENBL_WFI_IDLE=%d\r\n", ENABLE_WFI_IDLE);
+    chprintf(chp, "ENABLE_WFI_IDLE=%d\r\n", ENABLE_WFI_IDLE);
 #endif
 }
 
+#define TEST_WA_SIZE    THD_WA_SIZE(256)
 static void cmd_test(BaseSequentialStream *chp, int argc, char *argv[])
 {
     Thread *tp;
 
     (void)argv;
-    if (argc > 0) {
+    if (argc > 0)
+    {
         chprintf(chp, "Usage: test\r\n");
         return;
     }
-    tp = chThdCreateFromHeap(NULL, TEST_WA_SIZE, chThdGetPriority(),
-                             TestThread, chp);
-    if (tp == NULL) {
+    tp = chThdCreateFromHeap(NULL, TEST_WA_SIZE, chThdGetPriority(), TestThread, chp);
+    if (tp == NULL)
+    {
         chprintf(chp, "out of memory\r\n");
         return;
     }
     chThdWait(tp);
 }
 
-
-static const ShellCommand commands[] = {
+#define SHELL_WA_SIZE   THD_WA_SIZE(2048)
+static const ShellCommand commands[] =
+{
     {"mem", cmd_mem},
     {"threads", cmd_threads},
     {"test", cmd_test},
@@ -216,7 +221,8 @@ static const ShellCommand commands[] = {
     {NULL, NULL}
 };
 
-static const ShellConfig shell_cfg1 = {
+static const ShellConfig shell_cfg1 =
+{
     (BaseSequentialStream *)&SDU,
     commands
 };
@@ -229,7 +235,7 @@ static const ShellConfig shell_cfg1 = {
  * Red LED blinker thread, times are in milliseconds.
  */
 
-class BlinkerThd : public BaseStaticThread<128>
+class blinker_thd : public BaseStaticThread<128>
 {
     protected:
         virtual msg_t main(void)
@@ -244,14 +250,15 @@ class BlinkerThd : public BaseStaticThread<128>
                 palSetPad(GPIOB, GPIOB_LED1);
                 sleep(time);
             }
+            // TODO: How to get rid of the compiler warning ? the demos do not return anything from their blinkers either...        
         }
 
     public:
         // Empty constructor
-        BlinkerThd(void) : BaseStaticThread<128>() { }
+        blinker_thd(void) : BaseStaticThread<128>() { }
 };
 
-static BlinkerThd blinky;
+static blinker_thd blinky;
 
 
 /*
@@ -276,7 +283,6 @@ int main(void)
      */
     usb_serial_init();
 
-    /* Initializes reset button PA0 */
 
     /*
      * Shell manager initialization.
@@ -305,4 +311,6 @@ int main(void)
         }
         BaseThread::sleep(MS2ST(500));
     }
+    
+    return 0;
 }
