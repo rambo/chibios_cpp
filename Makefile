@@ -76,11 +76,12 @@ CSRC = $(PORTSRC) \
        $(HALSRC) \
        $(PLATFORMSRC) \
        $(BOARDSRC) \
-       drivers/usb_serial.c \
        $(CHIBIOS)/os/various/shell.c \
        $(CHIBIOS)/os/various/chprintf.c \
        $(CHIBIOS)/os/various/chrtclib.c \
-       $(CHIBIOS)/os/various/syscalls.c
+       $(CHIBIOS)/os/various/syscalls.c \
+       drivers/usb_serial.c \
+       drivers/reset.c
 
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global

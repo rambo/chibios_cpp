@@ -30,6 +30,7 @@
 #include "chprintf.h"
 #include "power.h"
 #include "drivers/usb_serial.h"
+#include "drivers/reset.h"
 
 using namespace chibios_rt;
 
@@ -50,42 +51,12 @@ static bool backup_domain_data_is_sane(void)
     return backup_domain_data->config_version == BACKUP_CONFIG_VERSION;
 }
 
-/**
- * Needed by cmd_flash
- */
-extern uint32_t __ram_end__;
-#define SYMVAL(sym) (uint32_t)(((uint8_t *)&(sym)) - ((uint8_t *)0))
 
 
 /*===========================================================================*/
 /* Command line related.                                                     */
 /*===========================================================================*/
 
-
-/**
- * SW-reset of the board
- */
-static void cmd_reset(BaseSequentialStream *chp, int argc, char *argv[])
-{
-    (void)argv;
-    (void)argc;
-    chprintf(chp, "Bye!\r\n");
-    chThdSleepMilliseconds(100);
-    NVIC_SystemReset();
-}
-
-/**
- * Tag end-of-ram with a magic word (checked by the reset handler) and reboot
- */
-static void cmd_flash(BaseSequentialStream *chp, int argc, char *argv[])
-{
-    (void)argv;
-    (void)argc;
-    chprintf(chp, "Bye!\r\n");
-    chThdSleepMilliseconds(100);
-    *((unsigned long *)(SYMVAL(__ram_end__) - 4)) = 0xDEADBEEF; // set magic flag => reset handler will jump into boot loader
-    NVIC_SystemReset();
-}
 
 
 static void cmd_bkp(BaseSequentialStream *chp, int argc, char *argv[])
