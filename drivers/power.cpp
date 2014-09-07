@@ -35,7 +35,7 @@ bool powermanager_class::request(BOARD_POWER_DOMAIN domain)
                 goto ERROR;
             }
         }
-        //palSetPad(BOARD_POWER_DOMAIN_CONFIG[domain].port, BOARD_POWER_DOMAIN_CONFIG[domain].pin);
+        palSetPad((ioportid_t)BOARD_POWER_DOMAIN_CONFIG[domain].port, BOARD_POWER_DOMAIN_CONFIG[domain].pin);
         if (BOARD_POWER_DOMAIN_CONFIG[domain].post_enable)
         {
             if (!BOARD_POWER_DOMAIN_CONFIG[domain].post_enable())
@@ -76,7 +76,7 @@ bool powermanager_class::release(BOARD_POWER_DOMAIN domain)
                 goto ERROR;
             }
         }
-        //palClearPad(BOARD_POWER_DOMAIN_CONFIG[domain].port, BOARD_POWER_DOMAIN_CONFIG[domain].pin);
+        palClearPad((ioportid_t)BOARD_POWER_DOMAIN_CONFIG[domain].port, BOARD_POWER_DOMAIN_CONFIG[domain].pin);
         if (BOARD_POWER_DOMAIN_CONFIG[domain].post_disable)
         {
             if (!BOARD_POWER_DOMAIN_CONFIG[domain].post_disable())

@@ -3,10 +3,10 @@
 #include "ch.h"
 #include "hal.h"
 
-/* this complains about error: unknown type name 'iopinid_t' but hal.h should get that defined
+/* this complains about error: unknown type name 'ioportid_t' but hal.h should get that defined
 typedef struct power_domain_struct
 {
-    iopinid_t port;
+    ioportid_t port;
     uint8_t pin; // no port is going to have more than 255 pins...
     bool (*pre_enable)(void);
     bool (*post_enable)(void);

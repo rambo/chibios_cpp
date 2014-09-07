@@ -5,7 +5,7 @@
 /*
 struct power_domain_struct
 {
-    iopinid_t port;
+    ioportid_t port;
     uint8_t pin; // no port is going to have more than 255 pins...
     bool (*pre_enable)(void);
     bool (*post_enable)(void);
