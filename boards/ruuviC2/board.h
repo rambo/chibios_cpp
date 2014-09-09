@@ -45,6 +45,8 @@ extern power_domain_t BOARD_POWER_DOMAIN_CONFIG[BOARD_NUM_POWER_DOMAINS];
 #define SDCARD LDO2
 
 
+#define BOARD_PREFERRED_GPTD GPTD6
+
 /*
  * Setup for STMicroelectronics STM32F4-Discovery board.
  */
