@@ -44,7 +44,7 @@ extern power_domain_t BOARD_POWER_DOMAIN_CONFIG[BOARD_NUM_POWER_DOMAINS];
 #define GPS_ANT LDO2
 #define SDCARD LDO2
 
-
+// Let's see if I can build a fully event/mailbox based timing system...
 #define BOARD_PREFERRED_GPTD GPTD6
 
 /*
