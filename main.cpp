@@ -218,6 +218,7 @@ class blinker_thd : public BaseStaticThread<128>
             setName("blinker");
             while (true)
             {
+                // BTW: For some reason this will never become anything else after cable disconnect
                 if (SDU.config->usbp->state == USB_ACTIVE)
                 {
                     time = 250;
