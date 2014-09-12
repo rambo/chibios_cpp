@@ -293,7 +293,7 @@ int main(void)
             board_green_led(PAL_HIGH);
             shelltp = shellCreate(&shell_cfg1, SHELL_WA_SIZE, NORMALPRIO);
         }
-        // If USB connection is lost, tell the shell to terminate
+        // If USB connection is lost, tell the shell to terminate, however it seems the state will always stay at active
         if (   shelltp
             && !chThdTerminated(shelltp)
             && !(SDU.config->usbp->state == USB_ACTIVE))
