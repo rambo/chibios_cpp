@@ -284,13 +284,25 @@ int main(void)
      * sleeping in a loop and check the USB state.
      */
     // TODO: Not really important but would be interesting from learing POV, how to make the shell a dynamic c++ thread
-    while (TRUE) {
-        if (!shelltp && (SDU.config->usbp->state == USB_ACTIVE))
+    while (TRUE)
+    {
+        // If USB is connected and we have no shell, create one
+        if (   !shelltp
+            && (SDU.config->usbp->state == USB_ACTIVE))
         {
             board_green_led(PAL_HIGH);
             shelltp = shellCreate(&shell_cfg1, SHELL_WA_SIZE, NORMALPRIO);
         }
-        else if (chThdTerminated(shelltp))
+        // If USB connection is lost, tell the shell to terminate
+        if (   shelltp
+            && !chThdTerminated(shelltp)
+            && !(SDU.config->usbp->state == USB_ACTIVE))
+        {
+            chThdTerminate(shelltp);
+        }
+        // Wait for the thread to terminate and release the memory it used
+        if (   shelltp
+            && chThdTerminated(shelltp))
         {
             chThdRelease(shelltp);    /* Recovers memory of the previous shell.   */
             shelltp = NULL;           /* Triggers spawning of a new shell.        */

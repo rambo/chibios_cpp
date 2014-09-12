@@ -17,6 +17,17 @@ Hard-tabs, 4 spaces. Logical blocks are always indented. for example
             break;
     }
 
+Different conditions in same if-statement go on separate lines
+
+    if (   !shelltp
+        && (SDU.config->usbp->state == USB_ACTIVE))
+    {
+        board_green_led(PAL_HIGH);
+        shelltp = shellCreate(&shell_cfg1, SHELL_WA_SIZE, NORMALPRIO);
+    }
+
+
+
 ### Curly brackets go to their own line
 
 Like so:
@@ -27,6 +38,8 @@ Like so:
     }
 
 This also demonstrates that even simple ifs with single statements will have their curly braces.
+
+
 
 ### Ternary operator is forbidden
 
@@ -41,6 +54,8 @@ It *really* hurts code readibility and breaks the rules about indentation.
         bar = 2;
     }
 
+
+
 ### Naming
 
 We use the underscore style. Not CamelCase or javaCase (I know ChibiOS uses Java style, we do not, this also serves
@@ -48,11 +63,15 @@ the purpose of easily distinguishing our own stuff from ChibiOS stuff).
 
 For thread classes add `_thd` to the end of the name. For shell commands add `cmd_` to the beginning of the name.
 
+
+
 ### Types
 
 Use the smallest type that is suitable, use the correct `xxx_t` typedef. Especially do not use `char` when you mean signed 8-bit integer, use `int8_t`. 
 
 Specify unsigned type if you are not going to use negative numbers, even if you do ne need the extra range.
+
+
 
 ### Object-Oriented
 
