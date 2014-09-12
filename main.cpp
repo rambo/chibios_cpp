@@ -285,10 +285,13 @@ int main(void)
      */
     // TODO: Not really important but would be interesting from learing POV, how to make the shell a dynamic c++ thread
     while (TRUE) {
-        if (!shelltp && (SDU.config->usbp->state == USB_ACTIVE)) {
+        if (!shelltp && (SDU.config->usbp->state == USB_ACTIVE))
+        {
             board_green_led(PAL_HIGH);
             shelltp = shellCreate(&shell_cfg1, SHELL_WA_SIZE, NORMALPRIO);
-        } else if (chThdTerminated(shelltp)) {
+        }
+        else if (chThdTerminated(shelltp))
+        {
             chThdRelease(shelltp);    /* Recovers memory of the previous shell.   */
             shelltp = NULL;           /* Triggers spawning of a new shell.        */
             board_green_led(PAL_LOW);
