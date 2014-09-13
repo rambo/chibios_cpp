@@ -170,5 +170,11 @@ void cmd_power_release(BaseSequentialStream *chp, int argc, char *argv[])
     }
 }
 
+void powermanager_class::exti_wakeup_callback()
+{
+    // TODO: Check if we're waking up from stop, act accordingly
+}
+
+
 // Create an instance to use
 powermanager_class powermanager = powermanager_class();

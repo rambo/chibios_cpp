@@ -11,7 +11,6 @@ typedef enum {
 } extint_edge_t;
 
 
-
 class extimanager_class
 {
     protected:
@@ -37,6 +36,7 @@ class extimanager_thd : public chibios_rt::BaseStaticThread<128>
 };
 
 extern extimanager_thd extimanager;
+extern chibios_rt::EvtSource extievent;
 
 
 #endif

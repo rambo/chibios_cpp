@@ -2,12 +2,15 @@
 #include "ch.hpp"
 #include "hal.h"
 #include "drivers/extievents.hpp"
+#include "drivers/power.hpp"
 
 static chibios_rt::BinarySemaphore exticonfig_semaphore = chibios_rt::BinarySemaphore(false);
 #define LOCK exticonfig_semaphore.wait();
 #define UNLOCK exticonfig_semaphore.signal();
 
 // A lot of this is shamelessly ripped from Kulve
+
+extievent = chibios_rt::EvtSource();
 
 /***********
  * Manager
@@ -48,10 +51,11 @@ uint32_t extimanager_class::get_ext_from_port(ioportid_t port)
 void extimanager_class::_extint_cb(EXTDriver *extp, expchannel_t channel)
 {
     (void)extp;
+    powermanager.exti_wakeup_callback();
     chDbgAssert(channel < EXT_MAX_CHANNELS, "extimanager_class::_extint_cb#1", "Channel number too large");
-    
-    // TODO: Post a signal...
 
+    // TODO: A good way to send the GPIO port(s) as well ??
+    extievent.broadcastFlagsI(channel);
 }
 
 
@@ -127,3 +131,6 @@ virtual msg_t extimanager_thd::main(void)
         // Nop
     }
 }
+
+
+extimanager = extimanager_thd();

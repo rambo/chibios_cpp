@@ -13,6 +13,8 @@ class powermanager_class
         bool release(BOARD_POWER_DOMAIN_t domain);
         bool status(BOARD_POWER_DOMAIN_t domain);
         bool all_released(void);
+        // This is only to be called by the extievents manager
+        void exti_wakeup_callback(void);
 
 };
 
