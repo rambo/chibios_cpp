@@ -31,6 +31,8 @@
 #include "drivers/usb_serial.h"
 #include "drivers/reset.h"
 #include "drivers/power.hpp"
+#include "drivers/extievents.hpp"
+
 
 using namespace chibios_rt;
 
@@ -239,7 +241,7 @@ class blinker_thd : public BaseStaticThread<128>
 
     public:
         // Empty constructor
-        blinker_thd(void) : BaseStaticThread<128>() { }
+        blinker_thd(void) { }
 };
 
 static blinker_thd blinky;
