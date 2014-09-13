@@ -66,7 +66,7 @@ void extimanager_class::enable_signal(ioportid_t port, uint8_t pin, extint_edge_
 
 
 
-void extimanager_class::set_callback(ioportid_t port, uint8_t pin, extint_edge_t mode, extcallback_t cb)
+void extimanager_class::set_callback(ioportid_t port, uint8_t pin, extint_edge_t edgemode, extcallback_t cb)
 {
     uint8_t need_start = 1;
     uint8_t i;
@@ -77,9 +77,9 @@ void extimanager_class::set_callback(ioportid_t port, uint8_t pin, extint_edge_t
 
     chDbgAssert(pin < EXT_MAX_CHANNELS , "extimanager_class::set_callback#1", "EXT pin number outside range");
     chDbgAssert(extcfg.channels[pin].cb == NULL, "extimanager_class::set_callback#2", "EXT pin already registered");
-    chDbgAssert(   mode == EXT_CH_MODE_RISING_EDGE
-                || mode == EXT_CH_MODE_FALLING_EDGE
-                || mode == EXT_CH_MODE_BOTH_EDGES, "extimanager_class::set_callback#3", "Invalid edge mode");
+    chDbgAssert(   edgemode == EXT_CH_MODE_RISING_EDGE
+                || edgemode == EXT_CH_MODE_FALLING_EDGE
+                || edgemode == EXT_CH_MODE_BOTH_EDGES, "extimanager_class::set_callback#3", "Invalid edge mode");
 
     for (i = 0; i < EXT_MAX_CHANNELS; ++i)
     {
@@ -90,7 +90,7 @@ void extimanager_class::set_callback(ioportid_t port, uint8_t pin, extint_edge_t
         }
     }
 
-    ext_mode = (mode | EXT_CH_MODE_AUTOSTART | get_ext_from_port(port));
+    ext_mode = (edgemode | EXT_CH_MODE_AUTOSTART | get_ext_from_port(port));
 
     cfg.cb = cb;
     cfg.mode = ext_mode;
