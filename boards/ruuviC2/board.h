@@ -23,11 +23,13 @@
 #define BOARD_RUUVITRACKERC2
 #define BOARD_NAME                  "Ruuvitracker C2"
 
+
 /**
  * Define power domains on this board
  *
  * board.c configures the ports and pins (and possible callbacks) to use for a given domains
  */
+/*
 #include "drivers/power_typedefs.h"
 typedef enum BOARD_POWER_DOMAINS {
      LDO2=0,    // MicroSD, GPS Antenna
@@ -39,6 +41,7 @@ typedef enum BOARD_POWER_DOMAINS {
 #define BOARD_NUM_POWER_DOMAINS 5
 // Must have space for all power domains (the definitions are made in board.c)
 extern power_domain_t BOARD_POWER_DOMAIN_CONFIG[BOARD_NUM_POWER_DOMAINS];
+*/
 // Some aliases so drivers have better life
 #define GPS_VCC LDO3
 #define GPS_ANT LDO2
@@ -73,7 +76,7 @@ extern power_domain_t BOARD_POWER_DOMAIN_CONFIG[BOARD_NUM_POWER_DOMAINS];
 /*
  * MCU type as defined in the ST header.
  */
-#define STM32F40_41xxx
+#define STM32F405xx
 
 /*
  * IO pins assignments.

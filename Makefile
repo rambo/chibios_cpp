@@ -15,7 +15,7 @@ endif
 
 # C++ specific options here (added to USE_OPT).
 ifeq ($(USE_CPPOPT),)
-  USE_CPPOPT = -fno-exceptions -fno-rtti
+  USE_CPPOPT = -fno-rtti
 endif
 
 # Enable this if you want the linker to remove unused code and data
@@ -30,7 +30,7 @@ endif
 
 # Enable this if you want link time optimizations (LTO)
 ifeq ($(USE_LTO),)
-  USE_LTO = no
+  USE_LTO = yes
 endif
 
 # If enabled, this option allows to compile the application in THUMB mode.
@@ -48,25 +48,50 @@ endif
 ##############################################################################
 
 ##############################################################################
+# Architecture or project specific options
+#
+
+# Stack size to be allocated to the Cortex-M process stack. This stack is
+# the stack used by the main() thread.
+ifeq ($(USE_PROCESS_STACKSIZE),)
+  USE_PROCESS_STACKSIZE = 0x400
+endif
+
+# Stack size to the allocated to the Cortex-M main/exceptions stack. This
+# stack is used for processing interrupts and exceptions.
+ifeq ($(USE_EXCEPTIONS_STACKSIZE),)
+  USE_EXCEPTIONS_STACKSIZE = 0x400
+endif
+
+# Enables the use of FPU on Cortex-M4 (no, softfp, hard).
+ifeq ($(USE_FPU),)
+  USE_FPU = no
+endif
+
+#
+# Architecture or project specific options
+##############################################################################
+
+##############################################################################
 # Project, sources and paths
 #
 
 # Define project name here
-PROJECT = chibios_cpp
+PROJECT = ch
 
 # Imported source files and paths
-CHIBIOS = ChibiOS
-include boards/ruuviC2/board.mk
-include $(CHIBIOS)/os/hal/platforms/STM32F4xx/platform.mk
+CHIBIOS = ./ChibiOS
 include $(CHIBIOS)/os/hal/hal.mk
-include $(CHIBIOS)/os/ports/GCC/ARMCMx/STM32F4xx/port.mk
-include $(CHIBIOS)/os/kernel/kernel.mk
-include $(CHIBIOS)/os/various/cpp_wrappers/kernel.mk
-include $(CHIBIOS)/test/test.mk
+include ./boards/ruuviC2/board.mk
+#include $(CHIBIOS)/os/hal/boards/ST_NUCLEO_F401RE/board.mk
+include $(CHIBIOS)/os/hal/ports/STM32/STM32F4xx/platform.mk
+include $(CHIBIOS)/os/hal/osal/rt/osal.mk
+include $(CHIBIOS)/os/rt/rt.mk
+include $(CHIBIOS)/os/rt/ports/ARMCMx/compilers/GCC/mk/port_stm32f4xx.mk
+#include $(CHIBIOS)/test/rt/test.mk
 
 # Define linker script file here
-LDSCRIPT= $(PORTLD)/STM32F405xG.ld
-#LDSCRIPT= $(PORTLD)/STM32F407xG_CCM.ld
+LDSCRIPT= $(PORTLD)/STM32F407xG.ld
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -74,23 +99,14 @@ CSRC = $(PORTSRC) \
        $(KERNSRC) \
        $(TESTSRC) \
        $(HALSRC) \
+       $(OSALSRC) \
        $(PLATFORMSRC) \
        $(BOARDSRC) \
-       $(CHIBIOS)/os/various/shell.c \
-       $(CHIBIOS)/os/various/chprintf.c \
-       $(CHIBIOS)/os/various/chrtclib.c \
-       $(CHIBIOS)/os/various/syscalls.c \
-       drivers/usb_serial.c \
-       drivers/power_typedefs.c \
-       drivers/reset.c
-
+       main.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
-CPPSRC = $(CHCPPSRC) \
-         hacks.cpp \
-         drivers/power.cpp \
-         main.cpp
+CPPSRC =
 
 # C sources to be compiled in ARM mode regardless of the global setting.
 # NOTE: Mixing ARM and THUMB mode enables the -mthumb-interwork compiler
@@ -116,9 +132,8 @@ TCPPSRC =
 ASMSRC = $(PORTASM)
 
 INCDIR = $(PORTINC) $(KERNINC) $(TESTINC) \
-         $(HALINC) $(PLATFORMINC) $(BOARDINC) \
-         $(CHCPPINC) \
-         $(CHIBIOS)/os/various  
+         $(HALINC) $(OSALINC) $(PLATFORMINC) $(BOARDINC) \
+         $(CHIBIOS)/os/various
 
 #
 # Project, sources and paths
@@ -137,10 +152,11 @@ CPPC = $(TRGT)g++
 # Enable loading with g++ only if you need C++ runtime support.
 # NOTE: You can use C++ even without C++ support if you are careful. C++
 #       runtime support makes code size explode.
-#LD   = $(TRGT)gcc
-LD   = $(TRGT)g++
+LD   = $(TRGT)gcc
+#LD   = $(TRGT)g++
 CP   = $(TRGT)objcopy
 AS   = $(TRGT)gcc -x assembler-with-cpp
+AR   = $(TRGT)ar
 OD   = $(TRGT)objdump
 SZ   = $(TRGT)size
 HEX  = $(CP) -O ihex
@@ -163,29 +179,6 @@ CPPWARN = -Wall -Wextra
 ##############################################################################
 
 ##############################################################################
-# Start of default section
-#
-
-# List all default C defines here, like -D_DEBUG=1
-DDEFS =
-
-# List all default ASM defines here, like -D_DEBUG=1
-DADEFS =
-
-# List all default directories to look for include files here
-DINCDIR =
-
-# List the default directory to look for the libraries here
-DLIBDIR =
-
-# List all default libraries here
-DLIBS =
-
-#
-# End of default section
-##############################################################################
-
-##############################################################################
 # Start of user section
 #
 
@@ -204,13 +197,9 @@ ULIBDIR =
 # List all user libraries here
 ULIBS =
 
-ifeq ($(ENABLE_WFI_IDLE),yes)
-  DDEFS += -DCORTEX_ENABLE_WFI_IDLE=TRUE
-endif
-
 #
 # End of user defines
 ##############################################################################
 
-RULESPATH = $(CHIBIOS)/os/ports/GCC/ARMCMx
+RULESPATH = $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC
 include $(RULESPATH)/rules.mk

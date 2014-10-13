@@ -14,9 +14,8 @@
     limitations under the License.
 */
 
-#include "ch.h"
 #include "hal.h"
-#include "drivers/power_typedefs.h"
+//#include "drivers/power_typedefs.h"
 #include "board.h"
 
 #if HAL_USE_PAL || defined(__DOXYGEN__)
@@ -42,6 +41,7 @@ const PALConfig pal_default_config =
   {0, 0, 0, 0, 0, 0, 0},
 };
 #endif
+/*
 // Must be in same order as in BOARD_POWER_DOMAINS
 power_domain_t BOARD_POWER_DOMAIN_CONFIG[BOARD_NUM_POWER_DOMAINS] =
 {
@@ -51,7 +51,7 @@ power_domain_t BOARD_POWER_DOMAIN_CONFIG[BOARD_NUM_POWER_DOMAINS] =
     { GPIOC, GPIOC_ENABLE_GSM_VBAT, NULL, NULL, NULL, NULL },
     { GPIOC, GPIOC_GPS_V_BACKUP_PWR, NULL, NULL, NULL, NULL },
 };
-
+*/
 /**
  * @brief   Early initialization code.
  * @details This initialization must be performed just after stack setup
@@ -65,7 +65,7 @@ void __early_init(void)
 /**
  * Internal helper to check the card insertion switch
  */
-bool_t _sdcard_is_inserted(void)
+bool _sdcard_is_inserted(void)
 {
     /* The pull-up is tied to ground when card is inserted */
     return (palReadPad(GPIOC, GPIOC_SD_CARD_INSERTED) == FALSE);
@@ -74,7 +74,7 @@ bool_t _sdcard_is_inserted(void)
 /**
  * Internal helper to check the card regulator (LDO2)
  */
-bool_t _sdcard_is_enabled(void)
+bool _sdcard_is_enabled(void)
 {
     /* Also make sure the card regulator is enabled */
     return palReadPad(GPIOC, GPIOC_ENABLE_LDO2);
@@ -84,7 +84,7 @@ bool_t _sdcard_is_enabled(void)
 /**
  * @brief   SDC card detection.
  */
-bool_t sdc_lld_is_card_inserted(SDCDriver *sdcp)
+bool sdc_lld_is_card_inserted(SDCDriver *sdcp)
 {
 
   (void)sdcp;
@@ -95,7 +95,7 @@ bool_t sdc_lld_is_card_inserted(SDCDriver *sdcp)
 /**
  * @brief   SDC card write protection detection.
  */
-bool_t sdc_lld_is_write_protected(SDCDriver *sdcp)
+bool sdc_lld_is_write_protected(SDCDriver *sdcp)
 {
 
   (void)sdcp;
@@ -108,7 +108,7 @@ bool_t sdc_lld_is_write_protected(SDCDriver *sdcp)
 /**
  * @brief   MMC_SPI card detection.
  */
-bool_t mmc_lld_is_card_inserted(MMCDriver *mmcp)
+bool mmc_lld_is_card_inserted(MMCDriver *mmcp)
 {
   (void)mmcp;
   return (   _sdcard_is_inserted()
@@ -118,7 +118,7 @@ bool_t mmc_lld_is_card_inserted(MMCDriver *mmcp)
 /**
  * @brief   MMC_SPI card write protection detection.
  */
-bool_t mmc_lld_is_write_protected(MMCDriver *mmcp)
+bool mmc_lld_is_write_protected(MMCDriver *mmcp)
 {
   (void)mmcp;
   /* We have no input for this, suppose false */
