@@ -1,6 +1,6 @@
 # ChibiOS C++ experiments
 
-This branch is currently **ChibiOS 2.6**, but see branches chibios_26 and chibios_30 for more.
+This branch is for **ChibiOS 3.0**.
 
 Running on Ruuvitracker devel HW (and if this goes well I will suggest moving the main RT firmware to C++ as well).
 
